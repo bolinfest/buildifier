@@ -296,7 +296,7 @@ func (p *printer) expr(v Expr, outerPrec int) {
 		// This preserves the specific escaping choices that
 		// BUILD authors have made, and it also works around
 		// b/7272572.
-		if strings.HasPrefix(v.Token, `"`) {
+		if strings.HasPrefix(v.Token, `'`) {
 			s, triple, err := unquote(v.Token)
 			if s == v.Value && triple == v.TripleQuote && err == nil {
 				p.printf("%s", v.Token)
@@ -379,7 +379,7 @@ func (p *printer) expr(v Expr, outerPrec int) {
 		if v.LineBreak {
 			p.margin = p.indent()
 			if v.Op == "=" {
-				p.margin += 4
+				p.margin += 2
 			}
 		}
 
@@ -501,7 +501,7 @@ func (p *printer) seq(brack string, list []Expr, end *End, mode seqMode, forceCo
 
 	default:
 		// Multi-line form.
-		p.margin += 4
+		p.margin += 2
 		for i, x := range list {
 			// If we are about to break the line before the first
 			// element and there are trailing end-of-line comments
@@ -525,7 +525,7 @@ func (p *printer) seq(brack string, list []Expr, end *End, mode seqMode, forceCo
 			p.newline()
 			p.printf("%s", strings.TrimSpace(com.Token))
 		}
-		p.margin -= 4
+		p.margin -= 2
 		p.newline()
 	}
 	p.depth--
@@ -563,7 +563,7 @@ func (p *printer) listFor(v *ListForExpr) {
 
 	if multiLine {
 		if v.Brack != "" {
-			p.margin += 4
+			p.margin += 2
 		}
 		p.newline()
 	}
@@ -595,7 +595,7 @@ func (p *printer) listFor(v *ListForExpr) {
 			p.printf("%s", strings.TrimSpace(com.Token))
 		}
 		if v.Brack != "" {
-			p.margin -= 4
+			p.margin -= 2
 		}
 		p.newline()
 	}

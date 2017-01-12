@@ -191,9 +191,9 @@ const hex = "0123456789abcdef"
 // quote returns the quoted form of the string value "x".
 // If triple is true, quote uses the triple-quoted form """x""".
 func quote(unquoted string, triple bool) string {
-	q := `"`
+	q := `'`
 	if triple {
-		q = `"""`
+		q = `'''`
 	}
 
 	var buf bytes.Buffer
@@ -201,10 +201,10 @@ func quote(unquoted string, triple bool) string {
 
 	for i := 0; i < len(unquoted); i++ {
 		c := unquoted[i]
-		if c == '"' && triple && (i+1 < len(unquoted) && unquoted[i+1] != '"' || i+2 < len(unquoted) && unquoted[i+2] != '"') {
+		if c == '\'' && triple && (i+1 < len(unquoted) && unquoted[i+1] != '\'' || i+2 < len(unquoted) && unquoted[i+2] != '\'') {
 			// Can pass up to two quotes through, because they are followed by a non-quote byte.
 			buf.WriteByte(c)
-			if i+1 < len(unquoted) && unquoted[i+1] == '"' {
+			if i+1 < len(unquoted) && unquoted[i+1] == '\'' {
 				buf.WriteByte(c)
 				i++
 			}
@@ -215,8 +215,8 @@ func quote(unquoted string, triple bool) string {
 			buf.WriteByte(c)
 			continue
 		}
-		if c == '\'' {
-			// Can allow ' since we always use ".
+		if c == '"' {
+			// Can allow " since we always use '.
 			buf.WriteByte(c)
 			continue
 		}
